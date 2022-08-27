@@ -14,7 +14,7 @@ COPY . /build_scripts
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
-    curl locale-gen \
+    curl locales \
     gcc g++ sudo
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
     locale-gen
