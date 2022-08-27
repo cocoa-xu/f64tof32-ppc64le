@@ -24,6 +24,15 @@ docker build . -t f64tof32:clang -f Dockerfile.clang
 docker run -it --rm f64tof32:clang
 ```
 
+Or use the [pre-built binary package](https://www.erlang.org/downloads#prebuilt)
+```shell
+$ docker run -it --rm ppc64le/ubuntu bash
+$ apt update && apt install erlang-dev
+$ erl
+> <<F32:1/little-float-unit:32>> = <<0.1:1/little-float-unit:32>>.
+> F32.
+```
+
 ## Test
 ```elixir
 iex> float64 = 0.1
