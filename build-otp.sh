@@ -5,7 +5,7 @@ set -e
 export OTP_VER="${1}"
 echo "[+] Build OTP: ${OTP_VER}"
 
-sudo apt update && sudo apt install -y \
+sudo apt-get update && sudo apt-get install -y \
     autoconf automake \
     libtool zlib1g-dev \
     git build-essential \
