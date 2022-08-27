@@ -2,8 +2,8 @@
 
 Pull from DockerHub
 ```shell
-docker pull cocoa-xu/f64tof32
-docker run -it --rm cocoa-xu/f64tof32
+docker pull cocoaxu/f64tof32
+docker run -it --rm cocoaxu/f64tof32
 ```
 
 Or, build from source
