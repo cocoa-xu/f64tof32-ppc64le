@@ -5,7 +5,8 @@ set -e
 export OTP_VER="${1}"
 echo "[+] Build OTP: ${OTP_VER}"
 
-sudo apt-get update && sudo apt-get install -y \
+sudo DEBIAN_FRONTEND=noninteractive apt-get update && \
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     autoconf automake \
     libtool zlib1g-dev \
     git build-essential \
