@@ -2,14 +2,26 @@
 
 Pull from DockerHub
 ```shell
-docker pull cocoaxu/f64tof32
-docker run -it --rm cocoaxu/f64tof32
+# the bug can be reproduced when
+# compiling Erlang/OTP on ppc64le using gcc 
+docker pull cocoaxu/f64tof32:gcc-11.2
+docker run -it --rm cocoaxu/f64tof32:gcc-11.2
+
+# the test code works as expected when
+# compiling Erlang/OTP on ppc64le using clang
+docker pull cocoaxu/f64tof32:clang
+docker run -it --rm cocoaxu/f64tof32:clang
 ```
 
 Or, build from source
 ```shell
-docker build . -t f64tof32
-docker run -it --rm f64tof32
+# gcc version
+docker build . -t f64tof32:gcc-11.2
+docker run -it --rm f64tof32:gcc-11.2
+
+# clang version
+docker build . -t f64tof32:clang -f Dockerfile.clang
+docker run -it --rm f64tof32:clang
 ```
 
 ## Test

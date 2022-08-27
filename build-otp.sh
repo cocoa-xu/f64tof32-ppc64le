@@ -6,7 +6,7 @@ export OTP_VER="${1}"
 echo "[+] Build OTP: ${OTP_VER}"
 
 sudo apt update && sudo apt install -y \
-    autoconf automake gcc g++ \
+    autoconf automake \
     libtool zlib1g-dev \
     git build-essential \
     libssl-dev libncurses-dev \
