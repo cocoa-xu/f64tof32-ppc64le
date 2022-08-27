@@ -53,7 +53,7 @@ erts_bs_get_float_2(Process *p, Uint num_bits, unsigned flags, ErlBinMatchBuffer
 
     CHECK_MATCH_BUFFER(mb);
     for (size_t index = 0; index < mb->size/8; index++) {
-    printf("mb->base[%ld]: %d\r\n", index, mb->base[index]);
+        printf("mb->base[%ld]: %d\r\n", index, mb->base[index]);
     }
     if (num_bits == 0) {
 	printf("num_bits==0\r\n");
