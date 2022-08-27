@@ -55,6 +55,28 @@ erts_bs_get_float_2(Process *p, Uint num_bits, unsigned flags, ErlBinMatchBuffer
     for (size_t index = 0; index < mb->size/8; index++) {
         printf("mb->base[%ld]: %d\r\n", index, mb->base[index]);
     }
+    
+    // static void check_match_buffer(ErlBinMatchBuffer* mb)
+    {
+        Eterm realbin;
+        Uint byteoffs;
+        byte* bytes, bitoffs, bitsz;
+        ProcBin* pb;
+        ERTS_GET_REAL_BIN(mb->orig, realbin, byteoffs, bitoffs, bitsz);
+        bytes = binary_bytes(realbin) + byteoffs;
+        ERTS_ASSERT(mb->base >= bytes && mb->base <= (bytes + binary_size(mb->orig)));
+        pb = (ProcBin *) boxed_val(realbin);
+        printf("pb->size: %ld\r\n", pb->size);
+        printf("pb->val: %p\r\n", pb->val);
+        printf("pb->bytes: %p\r\n", pb->bytes);
+        printf("pb->flags: %ld\r\n", pb->flags);
+        for (size_t index = 0; index < mb->size/8; index++) {
+            printf("pb->bytes[%ld]: %d\r\n", index, pb->bytes[index]);
+        }
+        if (pb->thing_word == HEADER_PROC_BIN)
+            ERTS_ASSERT(pb->flags == 0);
+    }
+
     if (num_bits == 0) {
 	printf("num_bits==0\r\n");
 	f.fd = 0.0;
@@ -116,7 +138,7 @@ erts_bs_get_float_2(Process *p, Uint num_bits, unsigned flags, ErlBinMatchBuffer
     }
     mb->offset += num_bits;
     hp = HeapOnlyAlloc(p, FLOAT_SIZE_OBJECT);
-    printf("HeapOnlyAlloc: p: %p, FLOAT_SIZE_OBJECT: %lld\r\n", p, FLOAT_SIZE_OBJECT);
+    printf("HeapOnlyAlloc: p: %p, FLOAT_SIZE_OBJECT: %ld\r\n", p, FLOAT_SIZE_OBJECT);
     PUT_DOUBLE(f, hp);
     return make_float(hp);
 }
@@ -150,4 +172,22 @@ NOT BIT_IS_MACHINE_ENDIAN
 num_bits==64, f64: 0.100000, f.fd: 0.100000
 HeapOnlyAlloc: p: 0x4000770ad0, FLOAT_SIZE_OBJECT: 2
 <<63, 185, 153, 153, 153, 153, 153, 154>>
+```
+
+Test in erlang.
+```erlang
+$ erl
+% works when hard-code the binary
+> <<F32_1:1/little-float-unit:32>> = <<205, 204, 204, 61>>.
+> F32_1.
+0.10000000149011612
+
+% works when int => f32
+> <<F32_2:1/little-float-unit:32>> = <<42:1/little-float-unit:32>>.
+> F32_2.
+42.0
+
+% not working when f64 => f32
+% the rhs <<0.1:1/little-float-unit:32>> evals to random data
+> <<F32_3:1/little-float-unit:32>> = <<0.1:1/little-float-unit:32>>.
 ```
