@@ -14,11 +14,12 @@ COPY . /build_scripts
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
-    curl \
+    curl locale-gen \
     gcc g++ sudo
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
 RUN bash /build_scripts/build-otp.sh "${OTP_VERSION}"
 RUN bash /build_scripts/build-elixir.sh "v${ELIXIR_VERSION}" /elixir
 
 ENV PATH="/elixir/bin:$PATH"
 CMD ["/usr/local/bin/iex"]
-ENTRYPOINT ["/usr/local/bin/iex"]
