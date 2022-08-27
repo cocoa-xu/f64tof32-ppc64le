@@ -176,7 +176,6 @@ HeapOnlyAlloc: p: 0x4000770ad0, FLOAT_SIZE_OBJECT: 2
 
 Test in erlang.
 ```erlang
-$ erl
 % works when hard-code the binary
 > <<F32_1:1/little-float-unit:32>> = <<205, 204, 204, 61>>.
 > F32_1.
